@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head><base target="_top"><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>let K=<?!= JSON.stringify(k) ?>;</script>
+<style>
+:root{--bg:#f3f5f4;--card:#fff;--ink:#14231f;--mute:#5d6f69;--line:#dbe3e0;--pri:#0d6b5c;--priD:#084a40;--warn:#b4570a;--bad:#a8321f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 'Instrument Sans',system-ui,sans-serif}
+header{background:var(--priD);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;flex:1}header span{opacity:.8;font-size:13px}
+button,select,input,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:8px;padding:9px 14px;background:var(--pri);color:#fff;font-weight:600}
+button.ghost{background:transparent;color:inherit;border:1px solid currentColor}button:disabled{opacity:.5}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #7cc9ba;outline-offset:1px}
+nav{display:flex;gap:4px;padding:10px 16px 0;border-bottom:1px solid var(--line);background:var(--card)}
+nav button{background:none;color:var(--mute);border-radius:8px 8px 0 0;border-bottom:3px solid transparent}nav button.on{color:var(--pri);border-color:var(--pri)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}.kpi b{display:block;font-size:26px}.kpi small{color:var(--mute)}
+.kpi.hot b{color:var(--warn)}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:760px}th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}th{font-size:13px;color:var(--mute);font-weight:600}tr:last-child td{border:0}
+.bar{height:8px;background:var(--line);border-radius:4px;min-width:90px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tools input,.tools select,textarea,.f select,.f input{padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff;width:100%}
+.tools input{flex:2;min-width:160px;width:auto}.tools select{flex:1;min-width:130px;width:auto}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center}
+.lead .n{font-weight:600}.lead .m{color:var(--mute);font-size:13px;grid-column:2}.lead a{color:var(--pri);font-weight:600;text-decoration:none}
+.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600;background:#e4ece9;color:var(--priD)}
+.tag.g{background:#e9e9e9;color:#444}.tag.ok{background:#cdeedd;color:#0b5a32}.tag.w{background:#ffe8c7;color:#8a4a00}.tag.b{background:#f6d8d2;color:var(--bad)}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:12px;z-index:9}.modal.on{display:flex}
+.box{background:#fff;border-radius:12px;padding:18px;width:100%;max-width:440px;max-height:95vh;overflow:auto}
+.sh{font-size:12.5px;font-weight:600;color:var(--mute);margin:14px 0 6px}.sh:first-child{margin-top:0}
+.sg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.sg div{background:var(--card);border:1px solid var(--line);border-top:3px solid #9aa8a3;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;min-height:64px}
+.sg b{font-size:21px;line-height:1.1;font-weight:700}.sg small{font-size:11.5px;line-height:1.2;color:var(--mute);margin-top:5px}
+.sg .ok{border-top-color:#2e9b63}.sg .ok b{color:#1b7a49}.sg .w{border-top-color:#d98a1c}.sg .w b{color:#a8610a}.sg .b{border-top-color:var(--bad)}.sg .b b{color:var(--bad)}.sg .z{opacity:.55}
+.fp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0 12px;display:grid;gap:10px}
+.fr{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{flex:1}
+.fr input,.fr select{height:38px;padding:0 10px;font-size:14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.fr select{flex:0 1 190px;min-width:130px}.fr input[type=date]{flex:0 0 150px}.fr #q{flex:1 1 220px;min-width:160px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;max-width:100%;overflow-x:auto}
+.seg button{background:#fff;color:var(--ink);border-radius:0;padding:0 14px;height:36px;font-size:13.5px;font-weight:500;border-right:1px solid var(--line);white-space:nowrap}.seg button:last-child{border-right:0}.seg button.on{background:var(--pri);color:#fff}
+@media(max-width:900px){.sg{display:flex;overflow-x:auto}.sg div{flex:0 0 110px}}
+.nm{margin:0;font-size:26px}.ph{display:block;font-size:22px;font-weight:700;color:var(--pri);text-decoration:none;margin:2px 0 10px}.wa{display:inline-block;background:#1fa855;color:#fff;border-radius:8px;padding:9px 16px;font-weight:600;text-decoration:none}select:disabled{background:#eef1f0;color:#9aa8a3;cursor:not-allowed}.f{margin:10px 0}.f label{display:block;font-size:13px;color:var(--mute);margin-bottom:3px}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.empty{padding:30px;text-align:center;color:var(--mute)}#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;display:none;z-index:10}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;max-width:640px}.panel textarea{min-height:200px}
+@media(max-width:560px){.lead{grid-template-columns:1fr auto}.lead .m{grid-column:1}}
+@media(prefers-reduced-motion:no-preference){.kpi b{transition:color .2s}}
+/* NEW: freeze banners above leads */
+.sticky-bar{position:sticky;top:0;z-index:5;background:var(--bg);padding-bottom:4px}
+</style></head><body>
+<header><h1>Gowell Call Tracker</h1><span id="who"></span><button class="ghost" onclick="load()">Refresh</button><button class="ghost" id="so" style="display:none" onclick="signOut()">Sign out</button></header>
+<nav id="nav"></nav>
+<main id="main"><div class="empty">Loading…</div></main>
+<div class="modal" id="md"><div class="box" id="bx"></div></div><div id="toast"></div>
+<script>
+let D=null,tab='leads',sel=new Set(),F={q:'',st:'',cs:'',emp:'',proj:'',lf:'',lt:'',db:'Updated'};
+const ST={get(){try{return localStorage.getItem('gct')||''}catch(e){return ''}},set(v){try{v?localStorage.setItem('gct',v):localStorage.removeItem('gct')}catch(e){}}};
+if(!K)K=ST.get();
+const $=id=>document.getElementById(id),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>new Date().toLocaleDateString('en-CA'),isM=()=>D&&D.me.role==='manager';
+const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2600)};
+const fail=e=>{if(String(e.message).includes('AUTH')){ST.set('');K='';return loginScreen('Your session ended. Please sign in again.')}toast(String(e.message||e).replace(/^(Error|Exception): /,''));document.querySelectorAll('button').forEach(b=>b.disabled=false)};
+const nameOf=em=>{const t=(D.members||[]).find(x=>x.email===String(em).toLowerCase());return t?t.name:(em||'Unassigned')};
+function load(){google.script.run.withSuccessHandler(d=>{D=d;F.from=F.from||today();F.to=F.to||today();if(!window._d){if(!isM())F.lf=F.lt=today();window._d=1}if(!isM()){if(tab!='hist')tab='leads'}else if(!window._i){tab='dash';window._i=1}draw()}).withFailureHandler(e=>{if(String(e.message).includes('AUTH')){const had=!!K;ST.set('');K='';loginScreen(had?'Your session ended. Please sign in again.':'')}else $('main').innerHTML='<div class="empty">'+esc(e.message)+'</div>'}).getData(K)}
+function draw(){
+ $('who').textContent='Welcome, '+D.me.name;$('so').style.display=isM()?'none':'';
+ $('nav').innerHTML=(isM()?[['dash','Dashboard'],['leads','All leads'],['dist','Add & distribute'],['team','Team']]:[['leads','My leads'],['hist','My calls']]).map(t=>`<button class="${tab==t[0]?'on':''}" onclick="tab='${t[0]}';draw()">${t[1]}</button>`).join('');
+ $('main').innerHTML=tab=='dash'?dash():tab=='dist'?dist():tab=='team'?team():tab=='hist'?histPage():list();if(tab=='dash'||tab=='hist')loadLog();
+}
+const wa=p=>{let d=String(p).replace(/\D/g,'');if(d.length==10)d='91'+d;else if(d.length==11&&d[0]=='0')d='91'+d.slice(1);return d};
+const TC={'Not Called':'g','Call Connected':'ok','Interested':'ok','Will Update':'w','Ring Not Response':'w','Switch Off':'w','Busy':'w','Waiting for Documents':'w','Submitted':'ok','Not Suitable':'b','Not Interested':'b','Wrong Number':'b','Invalid Number':'b'},tg=s=>s?`<span class="tag ${TC[s]||'g'}">${esc(s)}</span>`:'';
+const projSel=cb=>`<select onchange="F.proj=this.value;${cb}"><option value="">All projects</option>${[...new Set(D.leads.map(l=>l.Project).filter(Boolean))].map(p=>`<option ${F.proj==p?'selected':''}>${esc(p)}</option>`).join('')}</select>`;
+const ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.toLocaleDateString('en-CA')};
+const rng=(a,b)=>{F.from=ago(a);F.to=ago(b);draw()};
+const gh=x=>`<button class="ghost" style="color:var(--pri)" onclick="rng(${x[1]})">${x[0]}</button>`;
+const dateBar=()=>`<div class="tools"><input type="date" value="${F.from}" max="${today()}" aria-label="From date" onchange="F.from=this.value||today();if(F.to<F.from)F.to=F.from;draw()"><input type="date" value="${F.to}" max="${today()}" aria-label="To date" onchange="F.to=this.value||today();if(F.to<F.from)F.from=F.to;draw()">${[['Today','0,0'],['Yesterday','1,1'],['Last 7 days','6,0']].map(gh).join('')}</div>`;
+let DL=[];
+const kp=a=>'<div class="kpis">'+a.map(x=>`<div class="kpi ${x[2]||''}"><b>${x[1]}</b><small>${x[0]}</small></div>`).join('')+'</div>';
+function loadLog(){$('dc').innerHTML='<div class="empty">Loading…</div>';google.script.run.withSuccessHandler(r=>{DL=r;if($('dc'))fill()}).withFailureHandler(fail).getLog(K,F.from,F.to)}
+function fill(){$('dc').innerHTML=tab=='dash'?dashBody():histBody()}
+function dash(){return dateBar()+'<div class="tools">'+projSel('fill()')+'</div><div id="dc"></div>'}
+function histPage(){return dateBar()+'<div id="dc"></div>'}
+function histTable(G,emp){
+ const pm={};D.leads.forEach(l=>pm[l.LeadID]=l);
+ return G.length?`<div class="tw"><table><tr><th>Time</th>${emp?'<th>Employee</th>':''}<th>Lead</th><th>Phone</th><th>Call status</th><th>Candidate status</th><th>Remark</th></tr>${G.slice().reverse().slice(0,500).map(e=>`<tr><td>${esc(e.Time.slice(0,16))}</td>${emp?`<td>${esc(e.Employee)}</td>`:''}<td>${esc(e.Name)}</td><td>${esc((pm[e.LeadID]||{}).Phone||'')}</td><td>${tg(e.Status)}</td><td>${tg(e.CandidateStatus)}</td><td style="white-space:normal;text-align:left">${esc(e.Remark)}</td></tr>`).join('')}</table></div>`:'<div class="empty">No calls recorded in this date range.</div>'
+}
+function histBody(){const c=s=>DL.filter(e=>e.CandidateStatus==s).length;return kp([['Calls made',DL.length],['Call connected',DL.filter(e=>e.Status=='Call Connected').length],['Interested',c('Interested')],['Submitted',c('Submitted')],['Will update',c('Will Update')],['Not interested',c('Not Interested')]])+histTable(DL,false)}
+function dashBody(){
+ const pm={};D.leads.forEach(l=>pm[l.LeadID]=l);
+ const G=DL.filter(e=>!F.proj||(pm[e.LeadID]&&pm[e.LeadID].Project==F.proj)),L=D.leads.filter(l=>!F.proj||l.Project==F.proj);
+ const inR=d=>d&&d.slice(0,10)>=F.from&&d.slice(0,10)<=F.to,cc=(a,...s)=>a.filter(e=>s.includes(e.Status)).length,cs=(a,s)=>a.filter(e=>e.CandidateStatus==s).length;
+ let h=kp([['Leads distributed',L.filter(l=>l.AssigneeEmail&&inR(l.AssignedAt)).length],['Calls made',G.length],['Call connected',cc(G,'Call Connected')],['Interested',cs(G,'Interested')],['Submitted',cs(G,'Submitted')],['Not called yet',L.filter(l=>l.AssigneeEmail&&l.Status=='Not Called').length]]);
+ h+='<div class="tw"><table><tr><th>Employee</th><th>Distributed</th><th>Calls</th><th>Connected</th><th>Ring no response</th><th>Switch off</th><th>Busy</th><th>Wrong / invalid</th><th>Interested</th><th>Will update</th><th>Waiting for documents</th><th>Submitted</th><th>Not suitable</th><th>Not interested</th><th>Not called</th></tr>';
+ D.members.forEach(t=>{const m=L.filter(l=>l.AssigneeEmail==t.email),g=G.filter(e=>e.EmployeeEmail==t.email);
+  h+=`<tr><td><b>${esc(t.name)}</b>${t.active?'':' (off)'}</td><td>${m.filter(l=>inR(l.AssignedAt)).length}</td><td>${g.length}</td><td>${cc(g,'Call Connected')}</td><td>${cc(g,'Ring Not Response')}</td><td>${cc(g,'Switch Off')}</td><td>${cc(g,'Busy')}</td><td>${cc(g,'Wrong Number','Invalid Number')}</td><td>${cs(g,'Interested')}</td><td>${cs(g,'Will Update')}</td><td>${cs(g,'Waiting for Documents')}</td><td>${cs(g,'Submitted')}</td><td>${cs(g,'Not Suitable')}</td><td>${cs(g,'Not Interested')}</td><td>${m.filter(l=>l.Status=='Not Called').length}</td></tr>`});
+ return h+'</table></div><h3>Call history</h3>'+histTable(G,true)
+}
+const wk=()=>{const d=new Date();d.setDate(d.getDate()-(d.getDay()+6)%7);return d.toLocaleDateString('en-CA')},mo=()=>today().slice(0,8)+'01';
+const dOK=l=>{const d=(l[F.db]||'').slice(0,10);return (!F.lf||d>=F.lf)&&(!F.lt||d<=F.lt)};
+function lset(a,b){F.lf=a;F.lt=b;draw()}
+function lbar(){
+ const B=(t,a,b)=>`<button class="${F.lf===a&&F.lt===b?'on':''}" onclick="lset('${a}','${b}')">${t}</button>`;
+ return `<div class="fp"><div class="fr"><div class="seg">${B('All dates','','')}${B('Today',today(),today())}${B('Yesterday',ago(1),ago(1))}${B('This week',wk(),today())}${B('This month',mo(),today())}</div><span class="sp"></span><select onchange="F.db=this.value;rows()"><option value="Updated" ${F.db=='Updated'?'selected':''}>Date: last updated</option><option value="AssignedAt" ${F.db=='AssignedAt'?'selected':''}>Date: assigned</option></select><input type="date" value="${F.lf}" aria-label="From date" onchange="F.lf=this.value;draw()"><input type="date" value="${F.lt}" aria-label="To date" onchange="F.lt=this.value;draw()"></div>`
+}
+function statCards(){
+ const L=D.leads.filter(dOK),n=(k,v)=>L.filter(l=>l[k]==v).length,C=(t,v,c)=>`<div class="${c||''}${v?'':' z'}"><b>${v}</b><small>${esc(t)}</small></div>`;
+ const when=!F.lf&&!F.lt?'all dates':F.lf&&F.lf===F.lt?(F.lf===today()?'today':F.lf):(F.lf||'start')+' to '+(F.lt||'now');
+ return `<div class="sh">Call status · ${L.length} leads · ${when}</div><div class="sg">${D.statuses.map(s=>C(s,n('Status',s),TC[s])).join('')}</div><div class="sh">Candidate status</div><div class="sg">${D.cand.map(s=>C(s,n('CandidateStatus',s),TC[s])).join('')}</div>`
+}
+function list(){
+ let h='<div class="sticky-bar">';
+ if(!isM())h+=statCards();
+ h+=lbar();h+=`<div class="fr"><input id="q" placeholder="Search name or phone" value="${esc(F.q)}" oninput="F.q=this.value;rows()"><select onchange="F.st=this.value;rows()"><option value="">All call statuses</option>${D.statuses.map(s=>`<option ${F.st==s?'selected':''}>${s}</option>`).join('')}</select><select onchange="F.cs=this.value;rows()"><option value="">All candidate statuses</option>${D.cand.map(s=>`<option ${F.cs==s?'selected':''}>${s}</option>`).join('')}</select>`;
+ h+=projSel('rows()');if(isM())h+=`<select onchange="F.emp=this.value;rows()"><option value="">All employees</option><option value="_un" ${F.emp=='_un'?'selected':''}>Unassigned</option>${D.team.map(t=>`<option value="${esc(t.email)}" ${F.emp==t.email?'selected':''}>${esc(t.name)}</option>`).join('')}</select>`;
+ h+='</div></div>';
+ if(isM())h+=`<div class="tools"><select id="bt"><option value="">Move selected to…</option><option value="_un">Unassigned</option>${D.team.map(t=>`<option value="${esc(t.email)}">${esc(t.name)}</option>`).join('')}</select><button onclick="bulk()">Assign selected</button></div>`;
+ return h+'<div id="rows"></div>'
+}
+function rows(){
+ const q=F.q.toLowerCase(),L=D.leads.filter(l=>(!q||(l.Name+l.Phone).toLowerCase().includes(q))&&(!F.st||l.Status==F.st)&&(!F.cs||l.CandidateStatus==F.cs)&&dOK(l)&&(!F.proj||l.Project==F.proj)&&(!F.emp||(F.emp=='_un'?!l.AssigneeEmail:l.AssigneeEmail==F.emp)));
+ L.sort((x,y)=>y.Updated.localeCompare(x.Updated));
+ $('rows').innerHTML=L.length?L.slice(0,300).map(l=>`<div class="lead">${isM()?`<input type="checkbox" ${sel.has(l.LeadID)?'checked':''} onchange="this.checked?sel.add('${l.LeadID}'):sel.delete('${l.LeadID}')" aria-label="Select">`:'<span></span>'}
+ <div><span class="n">${esc(l.Name||'(no name)')}</span> ${tg(l.Status)} ${tg(l.CandidateStatus)}<br><a href="tel:${esc(l.Phone)}">${esc(l.Phone)}</a></div>
+ <button onclick="edit('${l.LeadID}')">Update</button>
+ <div class="m">${[l.Project,l.Source,isM()?(l.AssignedTo||'Unassigned'):'',l.Calls>0?l.Calls+' call(s), last '+l.Updated.slice(0,16):'Assigned '+l.AssignedAt.slice(0,16)].filter(Boolean).map(esc).join(' | ')}${l.Remark?'<br>'+esc(l.Remark):''}</div></div>`).join('')+(L.length>300?'<div class="empty">Showing first 300. Use search or filters.</div>':''):'<div class="empty">No leads found.</div>'
+}
+const _list=list;list=function(){const h=_list();setTimeout(rows,0);return h};
+function edit(id){
+ const l=D.leads.find(x=>x.LeadID==id),o=(a,v)=>a.map(s=>`<option ${s==v?'selected':''}>${s}</option>`).join('');
+ $('bx').innerHTML=`<h3 class="nm">${esc(l.Name)}</h3><a class="ph" href="tel:${esc(l.Phone)}">${esc(l.Phone)}</a><a class="wa" target="_blank" rel="noopener" href="https://wa.me/${wa(l.Phone)}">WhatsApp</a>
+ <div class="f"><label>Call status</label><select id="s" onchange="tc()">${o(D.statuses,l.Status)}</select></div>
+ <div class="f" id="cf"><label>Candidate status</label><select id="r"><option value="">Select</option>${o(D.cand,l.CandidateStatus)}</select></div>
+ <div class="f"><label>Remark</label><textarea id="k" rows="3">${esc(l.Remark)}</textarea></div>
+ <div class="row"><button class="ghost" style="color:var(--mute)" onclick="$('md').classList.remove('on')">Cancel</button><button id="sv" onclick="save('${id}')">Save call</button></div>`;
+ tc();$('md').classList.add('on')
+}
+function tc(){const on=$('s').value=='Call Connected',r=$('r');r.disabled=!on;if(!on)r.value=''}
+function save(id){
+ const s=$('s').value,r=s=='Call Connected'?$('r').value:'';if(s=='Not Called')return toast('Pick the call status');if(s=='Call Connected'&&!r)return toast('Pick the candidate status');
+ $('sv').disabled=true;$('sv').textContent='Saving…';
+ google.script.run.withSuccessHandler(res=>{
+  const now=new Date().toISOString().slice(0,19).replace('T',' ');
+  const l=D.leads.find(x=>x.LeadID==id);
+  Object.assign(l,{Status:s,CandidateStatus:r,Remark:$('k').value,Calls:res.calls,Updated:now});
+  $('md').classList.remove('on');toast('Saved');draw()
+ }).withFailureHandler(e=>{fail(e);$('sv').textContent='Save call'}).saveCall(K,id,s,r,$('k').value,'')
+}
+function bulk(){
+ if(!sel.size)return toast('Select leads first');const t=$('bt').value;if(!t)return toast('Choose who to assign to');
+ google.script.run.withSuccessHandler(n=>{toast(n+' lead(s) moved');sel.clear();load()}).withFailureHandler(fail).assign([...sel],t=='_un'?'':t)
+}
+function team(){
+ const cnt=e=>D.leads.filter(l=>l.AssigneeEmail==e).length;
+ return `<div class="panel" style="max-width:none"><h3 style="margin-top:0">Add team member</h3>
+ <div class="tools"><input id="mn" placeholder="Name"><input id="em" type="email" placeholder="Google email address"><button id="mb" onclick="addM()">Add member</button></div>
+ <p style="color:var(--mute);margin:0">Members open the app link and sign in with their email: they receive a 6-digit code. Copy link is a backup that opens their leads directly. Use New link if it is shared by mistake.</p></div><br>
+ <div class="tw"><table><tr><th>Name</th><th>Email</th><th>Leads</th><th>Access</th><th></th></tr>${D.members.map(m=>`<tr><td><b>${esc(m.name)}</b></td><td>${esc(m.email)}</td><td>${cnt(m.email)}</td><td>${m.active?'Active':'Off'}</td><td><button class="ghost" style="color:var(--pri)" onclick="togM('${esc(m.email)}',${!m.active})">${m.active?'Deactivate':'Activate'}</button> <button class="ghost" style="color:var(--pri)" onclick="copyL('${esc(m.key)}')">Copy link</button> <button class="ghost" style="color:var(--mute)" onclick="resetL('${esc(m.email)}')">New link</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No team members yet</td></tr>'}</table></div>`
+}
+function copyL(k){const u=D.url+'?k='+k;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast('Link copied'),()=>prompt('Copy this link',u))}
+function resetL(e){if(confirm('Create a new link? The old link will stop working.'))google.script.run.withSuccessHandler(()=>{toast('New link created');load()}).withFailureHandler(fail).resetKey(e)}
+function addM(){
+ const n=$('mn').value.trim(),e=$('em').value.trim();if(!n||!e)return toast('Enter name and email');
+ $('mb').disabled=true;google.script.run.withSuccessHandler(()=>{toast('Member saved');load()}).withFailureHandler(fail).addMember(n,e)
+}
+function togM(e,on){google.script.run.withSuccessHandler(()=>{toast(on?'Activated':'Deactivated');load()}).withFailureHandler(fail).setMemberActive(e,on)}
+function dist(){
+ return `<div class="panel"><h3 style="margin-top:0">Add &amp; distribute leads</h3>
+ <div class="f"><label>Project name</label><input id="pj" placeholder="e.g. UK Nurses Oct"></div>
+ <div class="f"><label>Leads: one per line as Name, Phone, Source (paste from Excel)</label><textarea id="t" placeholder="Anu Thomas, 9876543210, Facebook"></textarea></div>
+ <div class="f"><label>Recruiters (leads are shared equally, round robin)</label><div id="rc">${D.team.map(t=>`<label style="display:block;color:var(--ink);font-size:15px"><input type="checkbox" value="${esc(t.email)}" style="width:auto"> ${esc(t.name)}</label>`).join('')}</div>
+ <button class="ghost" style="color:var(--pri);margin-top:6px" onclick="document.querySelectorAll('#rc input').forEach(c=>c.checked=true)">Select all</button></div>
+ <div class="row"><button id="ab" onclick="add()">Distribute leads</button></div></div>`
+}
+function add(){
+ const t=$('t').value.trim(),p=$('pj').value.trim(),e=[...document.querySelectorAll('#rc input:checked')].map(c=>c.value);
+ if(!p)return toast('Enter a project name');if(!t)return toast('Paste some leads first');if(!e.length)return toast('Select at least one recruiter');
+ $('ab').disabled=true;
+ google.script.run.withSuccessHandler(r=>{toast(r.added+' added, '+r.skipped+' skipped (duplicate or invalid)');tab='leads';F.proj=p;load()}).withFailureHandler(fail).addLeads(t,e,p)
+}
+function loginScreen(msg){
+ $('who').textContent='';$('nav').innerHTML='';$('so').style.display='none';
+ $('main').innerHTML=`<div class="panel" style="margin:30px auto"><h3 style="margin-top:0">Sign in</h3><p style="color:var(--mute);margin-top:0">${esc(msg||'Enter your email. We will send you a 6-digit code.')}</p>
+ <div class="f"><label>Email</label><input id="le" type="email" autocomplete="email" placeholder="you@gmail.com"></div>
+ <div class="row" style="margin-top:0"><button id="lb" onclick="reqCode()">Send code</button></div>
+ <div id="s2" style="display:none"><div class="f"><label>6-digit code (check spam if it is not in your inbox)</label><input id="lc" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>
+ <div class="row"><button id="vb" onclick="verify()">Sign in</button></div></div></div>`
+}
+function reqCode(){
+ const e=$('le').value.trim();if(!e)return toast('Enter your email');$('lb').disabled=true;
+ google.script.run.withSuccessHandler(()=>{$('lb').disabled=false;$('lb').textContent='Send again';$('s2').style.display='block';$('lc').focus();toast('Code sent to '+e)}).withFailureHandler(fail).requestCode(e)
+}
+function verify(){
+ const e=$('le').value.trim(),c=$('lc').value.trim();if(c.length<6)return toast('Enter the 6-digit code');$('vb').disabled=true;
+ google.script.run.withSuccessHandler(t=>{ST.set(t);K=t;load()}).withFailureHandler(fail).verifyCode(e,c)
+}
+function signOut(){ST.set('');K='';D=null;loginScreen()}
+load();
+</script></body></html>
