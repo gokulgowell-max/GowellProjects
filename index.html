@@ -1,199 +1,905 @@
 <!DOCTYPE html>
-<html lang="en"><head><base target="_top"><meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>let K=<?!= JSON.stringify(k) ?>;</script>
-<style>
-:root{--bg:#f3f5f4;--card:#fff;--ink:#14231f;--mute:#5d6f69;--line:#dbe3e0;--pri:#0d6b5c;--priD:#084a40;--warn:#b4570a;--bad:#a8321f}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 'Instrument Sans',system-ui,sans-serif}
-header{background:var(--priD);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-header h1{font-size:18px;margin:0;flex:1}header span{opacity:.8;font-size:13px}
-button,select,input,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:8px;padding:9px 14px;background:var(--pri);color:#fff;font-weight:600}
-button.ghost{background:transparent;color:inherit;border:1px solid currentColor}button:disabled{opacity:.5}
-button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #7cc9ba;outline-offset:1px}
-nav{display:flex;gap:4px;padding:10px 16px 0;border-bottom:1px solid var(--line);background:var(--card)}
-nav button{background:none;color:var(--mute);border-radius:8px 8px 0 0;border-bottom:3px solid transparent}nav button.on{color:var(--pri);border-color:var(--pri)}
-main{max-width:1100px;margin:0 auto;padding:16px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}.kpi b{display:block;font-size:26px}.kpi small{color:var(--mute)}
-.kpi.hot b{color:var(--warn)}
-.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
-table{border-collapse:collapse;width:100%;min-width:760px}th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th:first-child,td:first-child{text-align:left}th{font-size:13px;color:var(--mute);font-weight:600}tr:last-child td{border:0}
-.bar{height:8px;background:var(--line);border-radius:4px;min-width:90px;overflow:hidden}.bar i{display:block;height:100%;background:var(--pri)}
-.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tools input,.tools select,textarea,.f select,.f input{padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff;width:100%}
-.tools input{flex:2;min-width:160px;width:auto}.tools select{flex:1;min-width:130px;width:auto}
-.lead{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center}
-.lead .n{font-weight:600}.lead .m{color:var(--mute);font-size:13px;grid-column:2}.lead a{color:var(--pri);font-weight:600;text-decoration:none}
-.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600;background:#e4ece9;color:var(--priD)}
-.tag.g{background:#e9e9e9;color:#444}.tag.ok{background:#cdeedd;color:#0b5a32}.tag.w{background:#ffe8c7;color:#8a4a00}.tag.b{background:#f6d8d2;color:var(--bad)}
-.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:12px;z-index:9}.modal.on{display:flex}
-.box{background:#fff;border-radius:12px;padding:18px;width:100%;max-width:440px;max-height:95vh;overflow:auto}
-.sh{font-size:12.5px;font-weight:600;color:var(--mute);margin:14px 0 6px}.sh:first-child{margin-top:0}
-.sg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
-.sg div{background:var(--card);border:1px solid var(--line);border-top:3px solid #9aa8a3;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;min-height:64px}
-.sg b{font-size:21px;line-height:1.1;font-weight:700}.sg small{font-size:11.5px;line-height:1.2;color:var(--mute);margin-top:5px}
-.sg .ok{border-top-color:#2e9b63}.sg .ok b{color:#1b7a49}.sg .w{border-top-color:#d98a1c}.sg .w b{color:#a8610a}.sg .b{border-top-color:var(--bad)}.sg .b b{color:var(--bad)}.sg .z{opacity:.55}
-.fp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:16px 0 12px;display:grid;gap:10px}
-.fr{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{flex:1}
-.fr input,.fr select{height:38px;padding:0 10px;font-size:14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
-.fr select{flex:0 1 190px;min-width:130px}.fr input[type=date]{flex:0 0 150px}.fr #q{flex:1 1 220px;min-width:160px}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;max-width:100%;overflow-x:auto}
-.seg button{background:#fff;color:var(--ink);border-radius:0;padding:0 14px;height:36px;font-size:13.5px;font-weight:500;border-right:1px solid var(--line);white-space:nowrap}.seg button:last-child{border-right:0}.seg button.on{background:var(--pri);color:#fff}
-@media(max-width:900px){.sg{display:flex;overflow-x:auto}.sg div{flex:0 0 110px}}
-.nm{margin:0;font-size:26px}.ph{display:block;font-size:22px;font-weight:700;color:var(--pri);text-decoration:none;margin:2px 0 10px}.wa{display:inline-block;background:#1fa855;color:#fff;border-radius:8px;padding:9px 16px;font-weight:600;text-decoration:none}select:disabled{background:#eef1f0;color:#9aa8a3;cursor:not-allowed}.f{margin:10px 0}.f label{display:block;font-size:13px;color:var(--mute);margin-bottom:3px}
-.row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
-.empty{padding:30px;text-align:center;color:var(--mute)}#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;display:none;z-index:10}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;max-width:640px}.panel textarea{min-height:200px}
-@media(max-width:560px){.lead{grid-template-columns:1fr auto}.lead .m{grid-column:1}}
-@media(prefers-reduced-motion:no-preference){.kpi b{transition:color .2s}}
-/* NEW: freeze banners above leads */
-.sticky-bar{position:sticky;top:0;z-index:5;background:var(--bg);padding-bottom:4px}
-</style></head><body>
-<header><h1>Gowell Call Tracker</h1><span id="who"></span><button class="ghost" onclick="load()">Refresh</button><button class="ghost" id="so" style="display:none" onclick="signOut()">Sign out</button></header>
-<nav id="nav"></nav>
-<main id="main"><div class="empty">Loading…</div></main>
-<div class="modal" id="md"><div class="box" id="bx"></div></div><div id="toast"></div>
-<script>
-let D=null,tab='leads',sel=new Set(),F={q:'',st:'',cs:'',emp:'',proj:'',lf:'',lt:'',db:'Updated'};
-const ST={get(){try{return localStorage.getItem('gct')||''}catch(e){return ''}},set(v){try{v?localStorage.setItem('gct',v):localStorage.removeItem('gct')}catch(e){}}};
-if(!K)K=ST.get();
-const $=id=>document.getElementById(id),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const today=()=>new Date().toLocaleDateString('en-CA'),isM=()=>D&&D.me.role==='manager';
-const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2600)};
-const fail=e=>{if(String(e.message).includes('AUTH')){ST.set('');K='';return loginScreen('Your session ended. Please sign in again.')}toast(String(e.message||e).replace(/^(Error|Exception): /,''));document.querySelectorAll('button').forEach(b=>b.disabled=false)};
-const nameOf=em=>{const t=(D.members||[]).find(x=>x.email===String(em).toLowerCase());return t?t.name:(em||'Unassigned')};
-function load(){google.script.run.withSuccessHandler(d=>{D=d;F.from=F.from||today();F.to=F.to||today();if(!window._d){if(!isM())F.lf=F.lt=today();window._d=1}if(!isM()){if(tab!='hist')tab='leads'}else if(!window._i){tab='dash';window._i=1}draw()}).withFailureHandler(e=>{if(String(e.message).includes('AUTH')){const had=!!K;ST.set('');K='';loginScreen(had?'Your session ended. Please sign in again.':'')}else $('main').innerHTML='<div class="empty">'+esc(e.message)+'</div>'}).getData(K)}
-function draw(){
- $('who').textContent='Welcome, '+D.me.name;$('so').style.display=isM()?'none':'';
- $('nav').innerHTML=(isM()?[['dash','Dashboard'],['leads','All leads'],['dist','Add & distribute'],['team','Team']]:[['leads','My leads'],['hist','My calls']]).map(t=>`<button class="${tab==t[0]?'on':''}" onclick="tab='${t[0]}';draw()">${t[1]}</button>`).join('');
- $('main').innerHTML=tab=='dash'?dash():tab=='dist'?dist():tab=='team'?team():tab=='hist'?histPage():list();if(tab=='dash'||tab=='hist')loadLog();
-}
-const wa=p=>{let d=String(p).replace(/\D/g,'');if(d.length==10)d='91'+d;else if(d.length==11&&d[0]=='0')d='91'+d.slice(1);return d};
-const TC={'Not Called':'g','Call Connected':'ok','Interested':'ok','Will Update':'w','Ring Not Response':'w','Switch Off':'w','Busy':'w','Waiting for Documents':'w','Submitted':'ok','Not Suitable':'b','Not Interested':'b','Wrong Number':'b','Invalid Number':'b'},tg=s=>s?`<span class="tag ${TC[s]||'g'}">${esc(s)}</span>`:'';
-const projSel=cb=>`<select onchange="F.proj=this.value;${cb}"><option value="">All projects</option>${[...new Set(D.leads.map(l=>l.Project).filter(Boolean))].map(p=>`<option ${F.proj==p?'selected':''}>${esc(p)}</option>`).join('')}</select>`;
-const ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.toLocaleDateString('en-CA')};
-const rng=(a,b)=>{F.from=ago(a);F.to=ago(b);draw()};
-const gh=x=>`<button class="ghost" style="color:var(--pri)" onclick="rng(${x[1]})">${x[0]}</button>`;
-const dateBar=()=>`<div class="tools"><input type="date" value="${F.from}" max="${today()}" aria-label="From date" onchange="F.from=this.value||today();if(F.to<F.from)F.to=F.from;draw()"><input type="date" value="${F.to}" max="${today()}" aria-label="To date" onchange="F.to=this.value||today();if(F.to<F.from)F.from=F.to;draw()">${[['Today','0,0'],['Yesterday','1,1'],['Last 7 days','6,0']].map(gh).join('')}</div>`;
-let DL=[];
-const kp=a=>'<div class="kpis">'+a.map(x=>`<div class="kpi ${x[2]||''}"><b>${x[1]}</b><small>${x[0]}</small></div>`).join('')+'</div>';
-function loadLog(){$('dc').innerHTML='<div class="empty">Loading…</div>';google.script.run.withSuccessHandler(r=>{DL=r;if($('dc'))fill()}).withFailureHandler(fail).getLog(K,F.from,F.to)}
-function fill(){$('dc').innerHTML=tab=='dash'?dashBody():histBody()}
-function dash(){return dateBar()+'<div class="tools">'+projSel('fill()')+'</div><div id="dc"></div>'}
-function histPage(){return dateBar()+'<div id="dc"></div>'}
-function histTable(G,emp){
- const pm={};D.leads.forEach(l=>pm[l.LeadID]=l);
- return G.length?`<div class="tw"><table><tr><th>Time</th>${emp?'<th>Employee</th>':''}<th>Lead</th><th>Phone</th><th>Call status</th><th>Candidate status</th><th>Remark</th></tr>${G.slice().reverse().slice(0,500).map(e=>`<tr><td>${esc(e.Time.slice(0,16))}</td>${emp?`<td>${esc(e.Employee)}</td>`:''}<td>${esc(e.Name)}</td><td>${esc((pm[e.LeadID]||{}).Phone||'')}</td><td>${tg(e.Status)}</td><td>${tg(e.CandidateStatus)}</td><td style="white-space:normal;text-align:left">${esc(e.Remark)}</td></tr>`).join('')}</table></div>`:'<div class="empty">No calls recorded in this date range.</div>'
-}
-function histBody(){const c=s=>DL.filter(e=>e.CandidateStatus==s).length;return kp([['Calls made',DL.length],['Call connected',DL.filter(e=>e.Status=='Call Connected').length],['Interested',c('Interested')],['Submitted',c('Submitted')],['Will update',c('Will Update')],['Not interested',c('Not Interested')]])+histTable(DL,false)}
-function dashBody(){
- const pm={};D.leads.forEach(l=>pm[l.LeadID]=l);
- const G=DL.filter(e=>!F.proj||(pm[e.LeadID]&&pm[e.LeadID].Project==F.proj)),L=D.leads.filter(l=>!F.proj||l.Project==F.proj);
- const inR=d=>d&&d.slice(0,10)>=F.from&&d.slice(0,10)<=F.to,cc=(a,...s)=>a.filter(e=>s.includes(e.Status)).length,cs=(a,s)=>a.filter(e=>e.CandidateStatus==s).length;
- let h=kp([['Leads distributed',L.filter(l=>l.AssigneeEmail&&inR(l.AssignedAt)).length],['Calls made',G.length],['Call connected',cc(G,'Call Connected')],['Interested',cs(G,'Interested')],['Submitted',cs(G,'Submitted')],['Not called yet',L.filter(l=>l.AssigneeEmail&&l.Status=='Not Called').length]]);
- h+='<div class="tw"><table><tr><th>Employee</th><th>Distributed</th><th>Calls</th><th>Connected</th><th>Ring no response</th><th>Switch off</th><th>Busy</th><th>Wrong / invalid</th><th>Interested</th><th>Will update</th><th>Waiting for documents</th><th>Submitted</th><th>Not suitable</th><th>Not interested</th><th>Not called</th></tr>';
- D.members.forEach(t=>{const m=L.filter(l=>l.AssigneeEmail==t.email),g=G.filter(e=>e.EmployeeEmail==t.email);
-  h+=`<tr><td><b>${esc(t.name)}</b>${t.active?'':' (off)'}</td><td>${m.filter(l=>inR(l.AssignedAt)).length}</td><td>${g.length}</td><td>${cc(g,'Call Connected')}</td><td>${cc(g,'Ring Not Response')}</td><td>${cc(g,'Switch Off')}</td><td>${cc(g,'Busy')}</td><td>${cc(g,'Wrong Number','Invalid Number')}</td><td>${cs(g,'Interested')}</td><td>${cs(g,'Will Update')}</td><td>${cs(g,'Waiting for Documents')}</td><td>${cs(g,'Submitted')}</td><td>${cs(g,'Not Suitable')}</td><td>${cs(g,'Not Interested')}</td><td>${m.filter(l=>l.Status=='Not Called').length}</td></tr>`});
- return h+'</table></div><h3>Call history</h3>'+histTable(G,true)
-}
-const wk=()=>{const d=new Date();d.setDate(d.getDate()-(d.getDay()+6)%7);return d.toLocaleDateString('en-CA')},mo=()=>today().slice(0,8)+'01';
-const dOK=l=>{const d=(l[F.db]||'').slice(0,10);return (!F.lf||d>=F.lf)&&(!F.lt||d<=F.lt)};
-function lset(a,b){F.lf=a;F.lt=b;draw()}
-function lbar(){
- const B=(t,a,b)=>`<button class="${F.lf===a&&F.lt===b?'on':''}" onclick="lset('${a}','${b}')">${t}</button>`;
- return `<div class="fp"><div class="fr"><div class="seg">${B('All dates','','')}${B('Today',today(),today())}${B('Yesterday',ago(1),ago(1))}${B('This week',wk(),today())}${B('This month',mo(),today())}</div><span class="sp"></span><select onchange="F.db=this.value;rows()"><option value="Updated" ${F.db=='Updated'?'selected':''}>Date: last updated</option><option value="AssignedAt" ${F.db=='AssignedAt'?'selected':''}>Date: assigned</option></select><input type="date" value="${F.lf}" aria-label="From date" onchange="F.lf=this.value;draw()"><input type="date" value="${F.lt}" aria-label="To date" onchange="F.lt=this.value;draw()"></div>`
-}
-function statCards(){
- const L=D.leads.filter(dOK),n=(k,v)=>L.filter(l=>l[k]==v).length,C=(t,v,c)=>`<div class="${c||''}${v?'':' z'}"><b>${v}</b><small>${esc(t)}</small></div>`;
- const when=!F.lf&&!F.lt?'all dates':F.lf&&F.lf===F.lt?(F.lf===today()?'today':F.lf):(F.lf||'start')+' to '+(F.lt||'now');
- return `<div class="sh">Call status · ${L.length} leads · ${when}</div><div class="sg">${D.statuses.map(s=>C(s,n('Status',s),TC[s])).join('')}</div><div class="sh">Candidate status</div><div class="sg">${D.cand.map(s=>C(s,n('CandidateStatus',s),TC[s])).join('')}</div>`
-}
-function list(){
- let h='<div class="sticky-bar">';
- if(!isM())h+=statCards();
- h+=lbar();h+=`<div class="fr"><input id="q" placeholder="Search name or phone" value="${esc(F.q)}" oninput="F.q=this.value;rows()"><select onchange="F.st=this.value;rows()"><option value="">All call statuses</option>${D.statuses.map(s=>`<option ${F.st==s?'selected':''}>${s}</option>`).join('')}</select><select onchange="F.cs=this.value;rows()"><option value="">All candidate statuses</option>${D.cand.map(s=>`<option ${F.cs==s?'selected':''}>${s}</option>`).join('')}</select>`;
- h+=projSel('rows()');if(isM())h+=`<select onchange="F.emp=this.value;rows()"><option value="">All employees</option><option value="_un" ${F.emp=='_un'?'selected':''}>Unassigned</option>${D.team.map(t=>`<option value="${esc(t.email)}" ${F.emp==t.email?'selected':''}>${esc(t.name)}</option>`).join('')}</select>`;
- h+='</div></div>';
- if(isM())h+=`<div class="tools"><select id="bt"><option value="">Move selected to…</option><option value="_un">Unassigned</option>${D.team.map(t=>`<option value="${esc(t.email)}">${esc(t.name)}</option>`).join('')}</select><button onclick="bulk()">Assign selected</button></div>`;
- return h+'<div id="rows"></div>'
-}
-function rows(){
- const q=F.q.toLowerCase(),L=D.leads.filter(l=>(!q||(l.Name+l.Phone).toLowerCase().includes(q))&&(!F.st||l.Status==F.st)&&(!F.cs||l.CandidateStatus==F.cs)&&dOK(l)&&(!F.proj||l.Project==F.proj)&&(!F.emp||(F.emp=='_un'?!l.AssigneeEmail:l.AssigneeEmail==F.emp)));
- L.sort((x,y)=>y.Updated.localeCompare(x.Updated));
- $('rows').innerHTML=L.length?L.slice(0,300).map(l=>`<div class="lead">${isM()?`<input type="checkbox" ${sel.has(l.LeadID)?'checked':''} onchange="this.checked?sel.add('${l.LeadID}'):sel.delete('${l.LeadID}')" aria-label="Select">`:'<span></span>'}
- <div><span class="n">${esc(l.Name||'(no name)')}</span> ${tg(l.Status)} ${tg(l.CandidateStatus)}<br><a href="tel:${esc(l.Phone)}">${esc(l.Phone)}</a></div>
- <button onclick="edit('${l.LeadID}')">Update</button>
- <div class="m">${[l.Project,l.Source,isM()?(l.AssignedTo||'Unassigned'):'',l.Calls>0?l.Calls+' call(s), last '+l.Updated.slice(0,16):'Assigned '+l.AssignedAt.slice(0,16)].filter(Boolean).map(esc).join(' | ')}${l.Remark?'<br>'+esc(l.Remark):''}</div></div>`).join('')+(L.length>300?'<div class="empty">Showing first 300. Use search or filters.</div>':''):'<div class="empty">No leads found.</div>'
-}
-const _list=list;list=function(){const h=_list();setTimeout(rows,0);return h};
-function edit(id){
- const l=D.leads.find(x=>x.LeadID==id),o=(a,v)=>a.map(s=>`<option ${s==v?'selected':''}>${s}</option>`).join('');
- $('bx').innerHTML=`<h3 class="nm">${esc(l.Name)}</h3><a class="ph" href="tel:${esc(l.Phone)}">${esc(l.Phone)}</a><a class="wa" target="_blank" rel="noopener" href="https://wa.me/${wa(l.Phone)}">WhatsApp</a>
- <div class="f"><label>Call status</label><select id="s" onchange="tc()">${o(D.statuses,l.Status)}</select></div>
- <div class="f" id="cf"><label>Candidate status</label><select id="r"><option value="">Select</option>${o(D.cand,l.CandidateStatus)}</select></div>
- <div class="f"><label>Remark</label><textarea id="k" rows="3">${esc(l.Remark)}</textarea></div>
- <div class="row"><button class="ghost" style="color:var(--mute)" onclick="$('md').classList.remove('on')">Cancel</button><button id="sv" onclick="save('${id}')">Save call</button></div>`;
- tc();$('md').classList.add('on')
-}
-function tc(){const on=$('s').value=='Call Connected',r=$('r');r.disabled=!on;if(!on)r.value=''}
-function save(id){
- const s=$('s').value,r=s=='Call Connected'?$('r').value:'';if(s=='Not Called')return toast('Pick the call status');if(s=='Call Connected'&&!r)return toast('Pick the candidate status');
- $('sv').disabled=true;$('sv').textContent='Saving…';
- google.script.run.withSuccessHandler(res=>{
-  const now=new Date().toISOString().slice(0,19).replace('T',' ');
-  const l=D.leads.find(x=>x.LeadID==id);
-  Object.assign(l,{Status:s,CandidateStatus:r,Remark:$('k').value,Calls:res.calls,Updated:now});
-  $('md').classList.remove('on');toast('Saved');draw()
- }).withFailureHandler(e=>{fail(e);$('sv').textContent='Save call'}).saveCall(K,id,s,r,$('k').value,'')
-}
-function bulk(){
- if(!sel.size)return toast('Select leads first');const t=$('bt').value;if(!t)return toast('Choose who to assign to');
- google.script.run.withSuccessHandler(n=>{toast(n+' lead(s) moved');sel.clear();load()}).withFailureHandler(fail).assign([...sel],t=='_un'?'':t)
-}
-function team(){
- const cnt=e=>D.leads.filter(l=>l.AssigneeEmail==e).length;
- return `<div class="panel" style="max-width:none"><h3 style="margin-top:0">Add team member</h3>
- <div class="tools"><input id="mn" placeholder="Name"><input id="em" type="email" placeholder="Google email address"><button id="mb" onclick="addM()">Add member</button></div>
- <p style="color:var(--mute);margin:0">Members open the app link and sign in with their email: they receive a 6-digit code. Copy link is a backup that opens their leads directly. Use New link if it is shared by mistake.</p></div><br>
- <div class="tw"><table><tr><th>Name</th><th>Email</th><th>Leads</th><th>Access</th><th></th></tr>${D.members.map(m=>`<tr><td><b>${esc(m.name)}</b></td><td>${esc(m.email)}</td><td>${cnt(m.email)}</td><td>${m.active?'Active':'Off'}</td><td><button class="ghost" style="color:var(--pri)" onclick="togM('${esc(m.email)}',${!m.active})">${m.active?'Deactivate':'Activate'}</button> <button class="ghost" style="color:var(--pri)" onclick="copyL('${esc(m.key)}')">Copy link</button> <button class="ghost" style="color:var(--mute)" onclick="resetL('${esc(m.email)}')">New link</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No team members yet</td></tr>'}</table></div>`
-}
-function copyL(k){const u=D.url+'?k='+k;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast('Link copied'),()=>prompt('Copy this link',u))}
-function resetL(e){if(confirm('Create a new link? The old link will stop working.'))google.script.run.withSuccessHandler(()=>{toast('New link created');load()}).withFailureHandler(fail).resetKey(e)}
-function addM(){
- const n=$('mn').value.trim(),e=$('em').value.trim();if(!n||!e)return toast('Enter name and email');
- $('mb').disabled=true;google.script.run.withSuccessHandler(()=>{toast('Member saved');load()}).withFailureHandler(fail).addMember(n,e)
-}
-function togM(e,on){google.script.run.withSuccessHandler(()=>{toast(on?'Activated':'Deactivated');load()}).withFailureHandler(fail).setMemberActive(e,on)}
-function dist(){
- return `<div class="panel"><h3 style="margin-top:0">Add &amp; distribute leads</h3>
- <div class="f"><label>Project name</label><input id="pj" placeholder="e.g. UK Nurses Oct"></div>
- <div class="f"><label>Leads: one per line as Name, Phone, Source (paste from Excel)</label><textarea id="t" placeholder="Anu Thomas, 9876543210, Facebook"></textarea></div>
- <div class="f"><label>Recruiters (leads are shared equally, round robin)</label><div id="rc">${D.team.map(t=>`<label style="display:block;color:var(--ink);font-size:15px"><input type="checkbox" value="${esc(t.email)}" style="width:auto"> ${esc(t.name)}</label>`).join('')}</div>
- <button class="ghost" style="color:var(--pri);margin-top:6px" onclick="document.querySelectorAll('#rc input').forEach(c=>c.checked=true)">Select all</button></div>
- <div class="row"><button id="ab" onclick="add()">Distribute leads</button></div></div>`
-}
-function add(){
- const t=$('t').value.trim(),p=$('pj').value.trim(),e=[...document.querySelectorAll('#rc input:checked')].map(c=>c.value);
- if(!p)return toast('Enter a project name');if(!t)return toast('Paste some leads first');if(!e.length)return toast('Select at least one recruiter');
- $('ab').disabled=true;
- google.script.run.withSuccessHandler(r=>{toast(r.added+' added, '+r.skipped+' skipped (duplicate or invalid)');tab='leads';F.proj=p;load()}).withFailureHandler(fail).addLeads(t,e,p)
-}
-function loginScreen(msg){
- $('who').textContent='';$('nav').innerHTML='';$('so').style.display='none';
- $('main').innerHTML=`<div class="panel" style="margin:30px auto"><h3 style="margin-top:0">Sign in</h3><p style="color:var(--mute);margin-top:0">${esc(msg||'Enter your email. We will send you a 6-digit code.')}</p>
- <div class="f"><label>Email</label><input id="le" type="email" autocomplete="email" placeholder="you@gmail.com"></div>
- <div class="row" style="margin-top:0"><button id="lb" onclick="reqCode()">Send code</button></div>
- <div id="s2" style="display:none"><div class="f"><label>6-digit code (check spam if it is not in your inbox)</label><input id="lc" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></div>
- <div class="row"><button id="vb" onclick="verify()">Sign in</button></div></div></div>`
-}
-function reqCode(){
- const e=$('le').value.trim();if(!e)return toast('Enter your email');$('lb').disabled=true;
- google.script.run.withSuccessHandler(()=>{$('lb').disabled=false;$('lb').textContent='Send again';$('s2').style.display='block';$('lc').focus();toast('Code sent to '+e)}).withFailureHandler(fail).requestCode(e)
-}
-function verify(){
- const e=$('le').value.trim(),c=$('lc').value.trim();if(c.length<6)return toast('Enter the 6-digit code');$('vb').disabled=true;
- google.script.run.withSuccessHandler(t=>{ST.set(t);K=t;load()}).withFailureHandler(fail).verifyCode(e,c)
-}
-function signOut(){ST.set('');K='';D=null;loginScreen()}
-load();
-</script></body></html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gowell Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f4f8; --surface: #ffffff; --ink: #0f172a; --muted: #64748b;
+      --line: #e2e8f0; --primary: #0f766e; --primary-hover: #0d9488; --primary-light: #ccfbf1;
+      --health: #0d9488; --tech: #b45309; --bad: #dc2626; --ok: #16a34a;
+      --shadow: 0 1px 3px rgba(15,23,42,.06), 0 4px 12px rgba(15,23,42,.04);
+      --shadow-lg: 0 4px 20px rgba(15,23,42,.08); --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, system-ui, sans-serif; min-height: 100vh; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid #5eead4; outline-offset: 2px; }
+
+    header { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+    .bar { max-width: 1400px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-mark { width: 36px; height: 36px; background: linear-gradient(135deg, #0f766e, #14b8a6); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
+    .bar h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .bar small { color: var(--muted); font-weight: 500; font-size: 13px; margin-left: 6px; }
+    main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+    .btn { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 9px; cursor: pointer; font-weight: 600; font-size: 13.5px; transition: all .15s ease; display: inline-flex; align-items: center; gap: 6px; }
+    .btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn.primary:hover { background: var(--primary-hover); }
+    .btn.danger { background: #fef2f2; border-color: #fecaca; color: var(--bad); }
+    .btn.danger:hover { background: #fee2e2; }
+    .btn:disabled { opacity: .6; cursor: wait; }
+
+    .filters { display: grid; grid-template-columns: 2fr repeat(6, 1fr) auto; gap: 10px; margin-bottom: 16px; background: var(--surface); padding: 14px; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); transition: border-color .15s; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px var(--primary-light); }
+    textarea { min-height: 72px; resize: vertical; }
+
+    .meta { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+    .card { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--tech); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: all .2s ease; box-shadow: var(--shadow); position: relative; }
+    .card.Healthcare { border-left-color: var(--health); }
+    .card.completed { opacity: 0.75; }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: #cbd5e1; }
+    .card h3 { font-size: 17px; font-weight: 650; line-height: 1.3; margin-bottom: 4px; }
+    .card .client { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .chip { background: #f1f5f9; border-radius: 99px; padding: 3px 11px; font-size: 12px; font-weight: 600; color: #334155; }
+    .chip-active { background: #d1fae5 !important; color: #065f46 !important; }
+    .chip-completed { background: #e2e8f0 !important; color: #475569 !important; }
+    .card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font-size: 13.5px; }
+    .card dt { color: var(--muted); } .card dd { margin: 0; font-weight: 500; }
+    .vl { margin: 0; padding-left: 18px; font-size: 13.5px; color: #334155; } .vl span { color: var(--muted); }
+
+    .card-actions { display: none; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+    .is-admin .card-actions { display: flex; }
+
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .panel h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .panel .hint { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+
+    .det dl { display: grid; grid-template-columns: 200px 1fr; gap: 10px 18px; margin: 0; }
+    .det dt { color: var(--muted); font-size: 13.5px; font-weight: 500; }
+    .det dd { margin: 0; white-space: pre-line; overflow-wrap: anywhere; font-weight: 500; }
+
+    .empty { padding: 56px 20px; text-align: center; color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); grid-column: 1 / -1; }
+
+    .fgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #334155; }
+    .req { color: var(--bad); }
+    .pos { border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 12px; background: #f8fafc; }
+    .pos .ph { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 700; font-size: 15px; }
+    .wide { grid-column: 1 / -1; }
+    .login { max-width: 400px; margin: 40px auto; }
+
+    .msg { padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; font-weight: 500; font-size: 14px; }
+    .msg.err { background: #fef2f2; color: var(--bad); border: 1px solid #fecaca; }
+    .msg.ok { background: #f0fdf4; color: var(--ok); border: 1px solid #bbf7d0; }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 1200px) { .filters { grid-template-columns: 1fr 1fr 1fr 1fr; } .filters .search { grid-column: 1 / -1; } }
+    @media (max-width: 700px) { main { padding: 16px; } .bar { padding: 12px 16px; } .filters { grid-template-columns: 1fr 1fr; } .det dl { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="logo">
+        <div class="logo-mark">G</div>
+        <h1>Gowell Projects <small id="count"></small></h1>
+      </div>
+      <button class="btn" id="toggle">Admin</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="msg"></div>
+
+    <section id="team">
+      <div id="s1">
+        <div class="filters">
+          <input class="search" id="q" type="search" placeholder="Search client, job title, country, project ID..." aria-label="Search">
+          <select id="f-status" aria-label="Project Status"></select>
+          <select id="f-team" aria-label="Team"></select>
+          <select id="f-country" aria-label="Country"></select>
+          <select id="f-gender" aria-label="Gender"></select>
+          <select id="f-client" aria-label="Client"></select>
+          <select id="f-mode" aria-label="Interview mode"></select>
+          <button class="btn" id="clear">Clear</button>
+        </div>
+        <div class="meta" id="meta">Loading projects...</div>
+        <div class="grid" id="grid"></div>
+      </div>
+
+      <div id="s2" hidden>
+        <div class="row">
+          <button class="btn" id="back2">← Back to projects</button>
+          <button class="btn" id="copyAll">Copy all job roles</button>
+          <button class="btn danger admin-only" id="delProject" hidden>Delete entire project</button>
+        </div>
+        <div class="panel" id="pinfo"></div>
+        <div class="meta" id="rmeta"></div>
+        <div id="addJobWrap" style="margin-bottom:16px;"></div>
+        <div class="grid" id="jgrid"></div>
+      </div>
+
+      <div id="s3" hidden>
+        <div class="row">
+          <button class="btn" id="back3">← Back to job roles</button>
+          <button class="btn primary" id="copyJob">Copy details</button>
+          <button class="btn admin-only" id="editJobBtn" hidden>Edit job role</button>
+          <button class="btn danger admin-only" id="delJobBtn" hidden>Delete job role</button>
+        </div>
+        <div class="panel det" id="jdetail"></div>
+      </div>
+    </section>
+
+    <section id="admin" hidden>
+      <div class="panel login" id="login">
+        <h2>Admin login</h2>
+        <p class="hint">Enter the admin password to manage projects.</p>
+        <label for="pw">Password</label>
+        <input id="pw" type="password" autocomplete="current-password">
+        <p style="margin-top:16px"><button class="btn primary" id="signin">Sign in</button></p>
+      </div>
+
+      <div id="formWrap" hidden>
+        <div class="panel" id="sharedPanel">
+          <h2 id="formTitle">New project</h2>
+          <p class="hint" id="formHint">Next Project ID: <strong id="nextId">...</strong></p>
+          <div class="fgrid" id="shared"></div>
+        </div>
+
+        <div class="panel" id="jobsPanel">
+          <h2>Job roles</h2>
+          <p class="hint">Fill the first job role, then click <strong>Apply to all</strong> to copy values to other job roles (Job Title & Vacancies are not copied).</p>
+          <div id="positions"></div>
+          <button class="btn" id="addPos" type="button">+ Add job role</button>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:8px; flex-wrap:wrap;">
+          <button class="btn primary" id="save" type="button" style="padding:12px 28px; font-size:15px">Save project</button>
+          <button class="btn" id="cancelEdit" type="button" hidden>Cancel</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="lists" hidden></div>
+
+  <script>
+    // ========== YOUR APPS SCRIPT URL ==========
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxcp1kDwwELlNUotn9oJlGLyYu6VaBs61cFy4lcPUsf8AxSloZcCmSlBbR6YLu3RIE/exec';
+    // =========================================
+
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const pretty = s => (s.length > 3 && s === s.toUpperCase()) ? s.charAt(0) + s.slice(1).toLowerCase() : s;
+    const HC = /nurs|caregiver|care giver|doctor|consultant|specialist|medical officer|physician|surgeon|therap|pharmac|midwi|home visit|health ?care|anm|gnm|lab tech/i;
+
+    const ADMIN_ONLY = ['agencyperson', 'emailphone', 'servicechargefees', 'candidatecosts'];
+
+    let DATA = {labels: {}, rows: []}, VIEW = [], PW = '';
+    let EDIT_MODE = null;
+
+    const FILTERS = [
+      {id: 'f-status', name: 'All project statuses', get: r => r.status || 'Active'},
+      {id: 'f-team', name: 'All teams', get: r => r._sector},
+      {id: 'f-country', name: 'All countries', get: r => r.country},
+      {id: 'f-gender', name: 'Any gender', get: r => r.genderpreference},
+      {id: 'f-client', name: 'All clients', get: r => r.clientcompanyname},
+      {id: 'f-mode', name: 'Any interview mode', get: r => r.interviewmode}
+    ];
+
+    const SHARED = [
+      ['clientcompanyname', 'Client / Company name', 'text', true],
+      ['country', 'Country', 'text', true, 'dl-country'],
+      ['date', 'Date', 'date', true],
+      ['status', 'Project Status', 'status', true]
+    ];
+
+    const JOB = [
+      ['jobtitledesignation', 'Job title / Designation', 'text', true],
+      ['jobstatus', 'Job Status', 'status', true],
+      ['numberofvacancies', 'Number of vacancies', 'text'],
+      ['genderpreference', 'Gender preference', 'select'],
+      ['agerange', 'Age range', 'text'],
+      ['minexperienceyears', 'Min experience (years)', 'text'],
+      ['licensingexamrequirements', 'Licensing / Exam requirements', 'text'],
+      ['monthlysalary', 'Monthly salary (with currency)', 'text'],
+      ['salaryininr', 'Salary in INR', 'text'],
+      ['interviewmode', 'Interview mode', 'text', false, 'dl-mode'],
+      ['servicechargefees', 'Service charge / Fees', 'text'],
+      ['candidatecosts', 'Candidate costs', 'text'],
+      ['foodbenefit', 'Food benefit', 'yesno'],
+      ['accommodationbenefit', 'Accommodation benefit', 'yesno'],
+      ['transportbenefit', 'Transport benefit', 'yesno'],
+      ['expectingtravellingtime', 'Expected travelling time', 'text'],
+      ['gapaccepted', 'Gap accepted', 'text'],
+      ['agencyperson', 'Agency / Person', 'text'],
+      ['emailphone', 'Email / Phone', 'text'],
+      ['educationalqualification', 'Educational qualification', 'area', false, '', 'wide'],
+      ['additionalbenefits', 'Additional benefits', 'area', false, '', 'wide'],
+      ['specialremarksnotes', 'Special remarks / Notes', 'area', false, '', 'wide']
+    ];
+
+    const NO_COPY = ['jobtitledesignation', 'numberofvacancies'];
+
+    // ========== API HELPER ==========
+    async function api(action, payload = {}) {
+      const body = { action, ...payload };
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data;
+    }
+
+    function field(f, extra, value) {
+      const [k, label, type, req, list, cls] = f;
+      const id = (extra || '') + k;
+      const c = cls ? ' class="' + cls + '"' : '';
+      let input;
+      const val = value != null ? esc(value) : '';
+
+      if (type === 'area') {
+        input = `<textarea id="${id}" data-k="${k}">${val}</textarea>`;
+      } else if (type === 'yesno') {
+        input = `<select id="${id}" data-k="${k}"><option value="">Not specified</option><option ${val==='Yes'?'selected':''}>Yes</option><option ${val==='No'?'selected':''}>No</option></select>`;
+      } else if (type === 'select') {
+        input = `<select id="${id}" data-k="${k}"><option value="">Not specified</option><option ${val==='Male'?'selected':''}>Male</option><option ${val==='Female'?'selected':''}>Female</option><option ${val==='Both'?'selected':''}>Both</option></select>`;
+      } else if (type === 'status') {
+        input = `<select id="${id}" data-k="${k}"><option value="Active" ${val==='Active'||!val?'selected':''}>Active</option><option value="Completed" ${val==='Completed'?'selected':''}>Completed</option></select>`;
+      } else if (type === 'date') {
+        let dateVal = val;
+        if (val && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(val)) {
+          const p = val.split('/');
+          dateVal = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+        }
+        input = `<input type="date" id="${id}" data-k="${k}" value="${dateVal}">`;
+      } else {
+        input = `<input id="${id}" data-k="${k}" value="${val}"${list ? ` list="${list}"` : ''}>`;
+      }
+      return `<div${c}><label for="${id}">${esc(label)}${req ? ' <span class="req">*</span>' : ''}</label>${input}</div>`;
+    }
+
+    function toast(text, ok) {
+      $('#msg').innerHTML = text ? `<div class="msg ${ok?'ok':'err'}" role="alert">${esc(text)}</div>` : '';
+      if (text) window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    const errText = e => String((e && e.message) || e).replace(/^Error:\s*/, '');
+
+    function effectiveJobStatus(job, projectStatus) {
+      if (projectStatus === 'Completed') return 'Completed';
+      return job.jobstatus || 'Active';
+    }
+
+    async function load(callback) {
+      $('#meta').textContent = 'Loading projects...';
+      try {
+        const d = await api('getProjects');
+        DATA = d;
+        DATA.rows.forEach(r => r._sector = HC.test(r.jobtitledesignation || '') ? 'Healthcare' : 'Technical');
+        DATA.projects = group(DATA.rows);
+        fillFilters();
+        $('#f-status').value = 'active';
+        render();
+        screen(1);
+        updateAdminUI();
+        if (typeof callback === 'function') callback();
+      } catch (e) {
+        $('#meta').textContent = '';
+        toast('Could not load projects: ' + errText(e));
+      }
+    }
+
+    function fillFilters() {
+      FILTERS.forEach(f => {
+        const el = $('#' + f.id), cur = el.value, seen = {};
+        DATA.rows.forEach(r => {
+          const v = String(f.get(r) || '').trim();
+          if (v && !seen[v.toLowerCase()]) seen[v.toLowerCase()] = pretty(v);
+        });
+        const keys = Object.keys(seen).sort();
+        el.innerHTML = `<option value="">${f.name}</option>` +
+          keys.map(k => `<option value="${esc(k)}">${esc(seen[k])}</option>`).join('');
+        if (keys.indexOf(cur) > -1) el.value = cur;
+      });
+      const uniq = f => Array.from(new Set(DATA.rows.map(r => pretty(String(f(r)||'').trim())).filter(Boolean))).sort();
+      let dl = `<datalist id="dl-country">${uniq(r => r.country).map(v => `<option value="${esc(v)}">`).join('')}</datalist>`;
+      dl += `<datalist id="dl-mode">${uniq(r => r.interviewmode).map(v => `<option value="${esc(v)}">`).join('')}</datalist>`;
+      $('#lists').innerHTML = dl;
+    }
+
+    function render() {
+      const toks = $('#q').value.toLowerCase().split(/\s+/).filter(Boolean);
+      const hits = DATA.rows.filter(r => {
+        for (const f of FILTERS) {
+          const sel = $('#' + f.id).value;
+          if (sel && String(f.get(r) || '').trim().toLowerCase() !== sel) return false;
+        }
+        if (!toks.length) return true;
+        const hay = Object.keys(r).map(k => r[k]).join(' ').toLowerCase();
+        return toks.every(t => hay.indexOf(t) > -1);
+      });
+      const ids = new Set(hits.map(r => r.projectid));
+      VIEW = DATA.projects.filter(p => ids.has(p.id));
+
+      VIEW.sort((a, b) => {
+        const aA = (a.status || 'Active') === 'Active' ? 0 : 1;
+        const bA = (b.status || 'Active') === 'Active' ? 0 : 1;
+        if (aA !== bA) return aA - bA;
+        const num = id => { const m = String(id).match(/PR\/(\d+)/i); return m ? +m[1] : 0; };
+        return num(b.id) - num(a.id);
+      });
+
+      const total = DATA.projects.length;
+      $('#count').textContent = total ? '· ' + total + ' projects' : '';
+      $('#meta').textContent = total ? `Showing ${VIEW.length} of ${total} projects` : '';
+      $('#grid').innerHTML = VIEW.length
+        ? VIEW.map(card).join('')
+        : `<div class="empty">${total ? 'No projects match your filters.' : 'No projects yet.'}</div>`;
+    }
+
+    const salary = r => [r.monthlysalary, r.salaryininr ? '(INR ' + r.salaryininr + ')' : ''].filter(Boolean).join(' ');
+    const SHARED_KEYS = SHARED.map(f => f[0]);
+
+    function group(rows) {
+      const m = {}, out = [];
+      rows.forEach(r => {
+        if (!m[r.projectid]) {
+          m[r.projectid] = {id: r.projectid, jobs: []};
+          out.push(m[r.projectid]);
+        }
+        m[r.projectid].jobs.push(r);
+      });
+      out.forEach(p => {
+        SHARED_KEYS.concat(['date', 'status']).forEach(k => {
+          const j = p.jobs.find(x => x[k]);
+          p[k] = j ? j[k] : (k === 'status' ? 'Active' : '');
+        });
+        p.sector = p.jobs.some(j => j._sector === 'Healthcare') ? 'Healthcare' : 'Technical';
+        p.vac = p.jobs.reduce((n, j) => n + (parseInt(j.numberofvacancies, 10) || 0), 0);
+      });
+      return out;
+    }
+
+    function card(p, i) {
+      const n = p.jobs.length;
+      const status = p.status || 'Active';
+      const statusClass = status === 'Completed' ? 'chip-completed' : 'chip-active';
+
+      const chips = [
+        `<span class="chip ${statusClass}">${esc(status)}</span>`,
+        p.country,
+        n + (n === 1 ? ' job role' : ' job roles'),
+        p.vac ? p.vac + ' vacancies' : ''
+      ].filter(Boolean).map(c => typeof c === 'string' && c.startsWith('<') ? c : `<span class="chip">${esc(pretty(c))}</span>`).join('');
+
+      const list = p.jobs.slice(0, 5).map(j => {
+        const js = effectiveJobStatus(j, status);
+        return `<li>${esc(pretty(j.jobtitledesignation || 'Job role'))}${j.numberofvacancies ? ` <span>× ${esc(j.numberofvacancies)}</span>` : ''} <span class="chip ${js==='Completed'?'chip-completed':'chip-active'}" style="font-size:11px;padding:1px 7px">${js}</span></li>`;
+      }).join('') + (n > 5 ? `<li><span>+ ${n - 5} more</span></li>` : '');
+
+      return `<div class="card ${p.sector} ${status === 'Completed' ? 'completed' : ''}" role="button" tabindex="0" data-i="${i}">
+        <h3>${esc(p.clientcompanyname || p.id)}</h3>
+        <div class="client">${esc(p.id)}${p.date ? ' · ' + esc(p.date) : ''}</div>
+        <div class="chips">${chips}</div>
+        <ul class="vl">${list}</ul>
+        <div class="card-actions">
+          <button class="btn" data-action="edit-project" data-id="${esc(p.id)}">Edit</button>
+          <button class="btn" data-action="duplicate-project" data-id="${esc(p.id)}">Duplicate</button>
+          <button class="btn danger" data-action="delete-project" data-id="${esc(p.id)}">Delete</button>
+        </div>
+      </div>`;
+    }
+
+    let P = null, J = null;
+    function screen(n) {
+      [1, 2, 3].forEach(i => $('#s' + i).hidden = i !== n);
+      window.scrollTo({top: 0});
+    }
+
+    function jobCard(j, n) {
+      const projectStatus = P ? (P.status || 'Active') : 'Active';
+      const js = effectiveJobStatus(j, projectStatus);
+      const statusClass = js === 'Completed' ? 'chip-completed' : 'chip-active';
+
+      const rows = [['Salary', salary(j)], ['Experience', j.minexperienceyears],
+        ['Licence / Exam', j.licensingexamrequirements], ['Interview', j.interviewmode]].filter(x => x[1]);
+      const chips = [
+        `<span class="chip ${statusClass}">${js}</span>`,
+        j.numberofvacancies ? j.numberofvacancies + ' vacancies' : '',
+        j.genderpreference,
+        j.agerange ? 'Age ' + j.agerange : ''
+      ].filter(Boolean).map(c => typeof c === 'string' && c.startsWith('<') ? c : `<span class="chip">${esc(pretty(c))}</span>`).join('');
+
+      return `<div class="card ${j._sector} ${js === 'Completed' ? 'completed' : ''}" role="button" tabindex="0" data-n="${n}">
+        <h3>${esc(pretty(j.jobtitledesignation || 'Job role'))}</h3>
+        <div class="client">${esc(j.jobid)}</div>
+        <div class="chips">${chips}</div>
+        <dl>${rows.map(x => `<dt>${x[0]}</dt><dd>${esc(x[1])}</dd>`).join('')}</dl>
+        <div class="card-actions">
+          <button class="btn" data-action="edit-job" data-id="${esc(j.jobid)}">Edit</button>
+          <button class="btn danger" data-action="delete-job" data-id="${esc(j.jobid)}">Delete</button>
+        </div>
+      </div>`;
+    }
+
+    function openProject(i) {
+      P = VIEW[i]; J = null;
+      const n = P.jobs.length;
+      const status = P.status || 'Active';
+      $('#pinfo').innerHTML = `<h2>${esc(P.clientcompanyname || P.id)}</h2>
+        <p class="hint" style="margin:0">${esc([P.id, pretty(P.country || ''), status, P.date ? 'added ' + P.date : ''].filter(Boolean).join(' · '))}</p>`;
+      $('#rmeta').textContent = n + (n === 1 ? ' job role' : ' job roles') + (P.vac ? ` · ${P.vac} vacancies in total` : '');
+      $('#jgrid').innerHTML = P.jobs.map(jobCard).join('');
+
+      const wrap = $('#addJobWrap');
+      wrap.innerHTML = '';
+      if (PW) {
+        const btn = document.createElement('button');
+        btn.className = 'btn primary';
+        btn.textContent = '+ Add job role to this project';
+        btn.onclick = () => openAddJobsToProject(P.id);
+        wrap.appendChild(btn);
+      }
+
+      updateAdminUI();
+      screen(2);
+    }
+
+    function openJob(n) {
+      J = P.jobs[n];
+      const projectStatus = P.status || 'Active';
+      const js = effectiveJobStatus(J, projectStatus);
+
+      $('#jdetail').innerHTML = `<h2>${esc(pretty(J.jobtitledesignation || 'Job role'))}</h2>
+        <p class="hint">${esc([P.clientcompanyname, pretty(P.country || ''), J.jobid, 'Status: ' + js].filter(Boolean).join(' · '))}</p>
+        <dl>${DATA.order
+          .filter(k => {
+            if (!J[k] || k === 'jobtitledesignation') return false;
+            if (ADMIN_ONLY.indexOf(k) > -1 && !PW) return false;
+            return true;
+          })
+          .map(k => `<dt>${esc(DATA.labels[k])}</dt><dd>${esc(J[k])}</dd>`)
+          .join('')}</dl>`;
+      updateAdminUI();
+      screen(3);
+    }
+
+    function shareText(r) {
+      const L = ['*' + pretty(r.jobtitledesignation) + '* · ' + pretty(r.country || '')];
+      const add = (l, v) => { if (v) L.push(l + ': ' + v); };
+      add('Client', r.clientcompanyname);
+      add('Vacancies', r.numberofvacancies);
+      add('Gender', r.genderpreference);
+      add('Age', r.agerange);
+      add('Qualification', r.educationalqualification);
+      add('Experience', r.minexperienceyears);
+      add('Licence/Exam', r.licensingexamrequirements);
+      add('Salary', salary(r));
+      add('Food', r.foodbenefit);
+      add('Accommodation', r.accommodationbenefit);
+      add('Transport', r.transportbenefit);
+      add('Benefits', r.additionalbenefits);
+      add('Interview', r.interviewmode);
+      add('Remarks', r.specialremarksnotes);
+      add('Ref', r.jobid);
+      return L.join('\n');
+    }
+
+    function copyText(t, btn) {
+      const lab = btn.textContent;
+      const done = () => { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = lab, 1500); };
+      const fallback = () => {
+        const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select();
+        try { document.execCommand('copy'); done(); } catch (e) { toast('Copy failed'); }
+        a.remove();
+      };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(done, fallback);
+      else fallback();
+    }
+
+    function updateAdminUI() {
+      const isAdmin = !!PW;
+      document.body.classList.toggle('is-admin', isAdmin);
+      document.querySelectorAll('.admin-only').forEach(el => el.hidden = !isAdmin);
+    }
+
+    let posCount = 0;
+
+    function addPosition(prefill) {
+      posCount++;
+      const d = document.createElement('div');
+      d.className = 'pos';
+      d.innerHTML = `
+        <div class="ph">
+          <span>Job role</span>
+          <span class="acts">
+            <button class="btn ap" type="button">Apply to all</button>
+            <button class="btn rm" type="button">Remove</button>
+          </span>
+        </div>
+        <div class="fgrid">${JOB.map(f => field(f, 'p' + posCount + '-', prefill ? prefill[f[0]] : '')).join('')}</div>
+      `;
+      d.querySelector('.rm').onclick = () => { d.remove(); renumber(); };
+      d.querySelector('.ap').onclick = function() { applyToAll(d, this); };
+      $('#positions').appendChild(d);
+      renumber();
+    }
+
+    function renumber() {
+      const all = document.querySelectorAll('.pos');
+      all.forEach((p, i) => {
+        p.querySelector('.ph span').textContent = 'Job role ' + (i + 1);
+        p.querySelector('.rm').hidden = all.length < 2;
+        p.querySelector('.ap').hidden = all.length < 2;
+      });
+    }
+
+    function applyToAll(sourceBlock, btn) {
+      const allBlocks = Array.from(document.querySelectorAll('.pos'));
+      if (allBlocks.length < 2) {
+        toast('Add at least one more job role first');
+        return;
+      }
+      const otherBlocks = allBlocks.filter(b => b !== sourceBlock);
+      const hasData = otherBlocks.some(block => {
+        return JOB.some(f => {
+          if (NO_COPY.indexOf(f[0]) > -1) return false;
+          const el = block.querySelector('[data-k="' + f[0] + '"]');
+          return el && el.value && el.value.trim() !== '';
+        });
+      });
+
+      if (hasData && btn.dataset.confirmed !== 'yes') {
+        btn.dataset.confirmed = 'yes';
+        btn.textContent = 'Click again to overwrite';
+        btn.style.background = '#fef3c7';
+        btn.style.borderColor = '#f59e0b';
+        setTimeout(() => {
+          btn.dataset.confirmed = '';
+          btn.textContent = 'Apply to all';
+          btn.style.background = '';
+          btn.style.borderColor = '';
+        }, 4000);
+        return;
+      }
+
+      otherBlocks.forEach(block => {
+        JOB.forEach(f => {
+          const key = f[0];
+          if (NO_COPY.indexOf(key) > -1) return;
+          const sourceEl = sourceBlock.querySelector('[data-k="' + key + '"]');
+          const targetEl = block.querySelector('[data-k="' + key + '"]');
+          if (sourceEl && targetEl) targetEl.value = sourceEl.value;
+        });
+      });
+
+      btn.dataset.confirmed = '';
+      btn.textContent = 'Applied!';
+      btn.style.background = '#d1fae5';
+      btn.style.borderColor = '#10b981';
+      setTimeout(() => {
+        btn.textContent = 'Apply to all';
+        btn.style.background = '';
+        btn.style.borderColor = '';
+      }, 1500);
+      toast('Values applied to all other job roles', true);
+    }
+
+    function todayISO() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function resetForm() {
+      EDIT_MODE = null;
+      $('#formTitle').textContent = 'New project';
+      $('#formHint').innerHTML = 'Next Project ID: <strong id="nextId">...</strong>';
+      $('#sharedPanel').hidden = false;
+      $('#jobsPanel').hidden = false;
+      $('#addPos').hidden = false;
+      $('#cancelEdit').hidden = true;
+      $('#save').textContent = 'Save project';
+
+      $('#shared').innerHTML = SHARED.map(f => field(f, 's-')).join('');
+      const dateInput = document.querySelector('#s-date');
+      if (dateInput) dateInput.value = todayISO();
+
+      $('#positions').innerHTML = '';
+      posCount = 0;
+      addPosition();
+      api('getNextProjectId').then(id => {
+        const el = $('#nextId');
+        if (el) el.textContent = id;
+      }).catch(() => {});
+    }
+
+    function openEditJob(jobId) {
+      const job = DATA.rows.find(r => r.jobid === jobId);
+      if (!job) return toast('Job not found');
+
+      EDIT_MODE = { type: 'job', jobId };
+      showAdmin(true);
+      $('#login').hidden = true;
+      $('#formWrap').hidden = false;
+
+      $('#formTitle').textContent = 'Edit job role';
+      $('#formHint').textContent = 'Job ID: ' + jobId;
+      $('#sharedPanel').hidden = true;
+      $('#jobsPanel').hidden = false;
+      $('#addPos').hidden = true;
+      $('#cancelEdit').hidden = false;
+      $('#save').textContent = 'Update job role';
+
+      $('#positions').innerHTML = '';
+      posCount = 0;
+      addPosition(job);
+    }
+
+    function openEditProject(projectId) {
+      const proj = DATA.projects.find(p => p.id === projectId);
+      if (!proj) return toast('Project not found');
+
+      EDIT_MODE = { type: 'project', projectId };
+      showAdmin(true);
+      $('#login').hidden = true;
+      $('#formWrap').hidden = false;
+
+      $('#formTitle').textContent = 'Edit project';
+      $('#formHint').textContent = 'Project ID: ' + projectId + '  •  Setting Status to Completed will mark ALL job roles as Completed';
+      $('#sharedPanel').hidden = false;
+      $('#shared').innerHTML = SHARED.map(f => field(f, 's-', proj[f[0]])).join('');
+      $('#jobsPanel').hidden = true;
+      $('#addPos').hidden = true;
+      $('#cancelEdit').hidden = false;
+      $('#save').textContent = 'Update project';
+    }
+
+    function openAddJobsToProject(projectId) {
+      EDIT_MODE = { type: 'addjobs', projectId: projectId };
+      showAdmin(true);
+      $('#login').hidden = true;
+      $('#formWrap').hidden = false;
+
+      $('#formTitle').textContent = 'Add job roles to existing project';
+      $('#formHint').textContent = 'Project ID: ' + projectId + '  •  New job roles will be added to this project';
+      $('#sharedPanel').hidden = true;
+      $('#jobsPanel').hidden = false;
+      $('#addPos').hidden = false;
+      $('#cancelEdit').hidden = false;
+      $('#save').textContent = 'Add job roles';
+
+      $('#positions').innerHTML = '';
+      posCount = 0;
+      addPosition();
+    }
+
+    function collect(root) {
+      const o = {};
+      root.querySelectorAll('[data-k]').forEach(el => o[el.dataset.k] = el.value.trim());
+      return o;
+    }
+
+    async function save() {
+      toast('');
+
+      try {
+        if (EDIT_MODE && EDIT_MODE.type === 'addjobs') {
+          const jobs = Array.from(document.querySelectorAll('.pos')).map(collect);
+          const bad = jobs.findIndex(j => !j.jobtitledesignation);
+          if (bad > -1) return toast('Job role ' + (bad + 1) + ': job title is required');
+
+          $('#save').disabled = true;
+          $('#save').textContent = 'Adding...';
+          const res = await api('addJobsToProject', { password: PW, projectId: EDIT_MODE.projectId, jobs });
+          $('#save').disabled = false;
+          toast('Added ' + res.added + ' job role(s) to ' + res.projectId, true);
+          EDIT_MODE = null;
+          showAdmin(false);
+          load();
+          return;
+        }
+
+        if (EDIT_MODE && EDIT_MODE.type === 'job') {
+          const jobData = collect(document.querySelector('.pos'));
+          if (!jobData.jobtitledesignation) return toast('Job title is required');
+          $('#save').disabled = true;
+          $('#save').textContent = 'Updating...';
+          await api('updateJob', { password: PW, jobId: EDIT_MODE.jobId, data: jobData });
+          $('#save').disabled = false;
+          toast('Job role updated successfully', true);
+          EDIT_MODE = null;
+          showAdmin(false);
+          load();
+          return;
+        }
+
+        if (EDIT_MODE && EDIT_MODE.type === 'project') {
+          const shared = collect($('#shared'));
+          if (!shared.clientcompanyname || !shared.country) return toast('Client name and country are required');
+          $('#save').disabled = true;
+          $('#save').textContent = 'Updating...';
+          const res = await api('updateProjectShared', { password: PW, projectId: EDIT_MODE.projectId, shared });
+          $('#save').disabled = false;
+          toast('Project updated (' + res.updatedRows + ' rows)', true);
+          EDIT_MODE = null;
+          showAdmin(false);
+          load();
+          return;
+        }
+
+        // New project
+        const shared = collect($('#shared'));
+        const payload = { shared, jobs: Array.from(document.querySelectorAll('.pos')).map(collect) };
+        if (!payload.shared.clientcompanyname || !payload.shared.country) return toast('Client name and country are required');
+        const bad = payload.jobs.findIndex(j => !j.jobtitledesignation);
+        if (bad > -1) return toast('Job role ' + (bad + 1) + ': job title is required');
+
+        $('#save').disabled = true;
+        $('#save').textContent = 'Saving...';
+        const res = await api('addProject', { password: PW, payload });
+        $('#save').disabled = false;
+        $('#save').textContent = 'Save project';
+        toast('Saved ' + res.projectId + ' with ' + res.jobIds.length + ' job role(s)', true);
+        resetForm();
+        load();
+      } catch (e) {
+        $('#save').disabled = false;
+        $('#save').textContent = EDIT_MODE ? (EDIT_MODE.type === 'addjobs' ? 'Add job roles' : EDIT_MODE.type === 'job' ? 'Update job role' : 'Update project') : 'Save project';
+        toast(errText(e));
+      }
+    }
+
+    function confirmDelete(message, onConfirm) {
+      if (!confirm(message)) return;
+      onConfirm();
+    }
+
+    async function deleteJob(jobId) {
+      confirmDelete('Delete this job role permanently?\n\n' + jobId, async () => {
+        try {
+          await api('deleteJobs', { password: PW, jobIds: [jobId] });
+          toast('Job role deleted', true);
+          load();
+          screen(1);
+        } catch (e) { toast(errText(e)); }
+      });
+    }
+
+    async function deleteProject(projectId) {
+      confirmDelete('Delete the ENTIRE project and all its job roles?\n\n' + projectId + '\n\nThis cannot be undone.', async () => {
+        try {
+          const res = await api('deleteProject', { password: PW, projectId });
+          toast('Project deleted (' + res.deleted + ' rows)', true);
+          load();
+          screen(1);
+        } catch (e) { toast(errText(e)); }
+      });
+    }
+
+    async function duplicateProject(projectId) {
+      if (!confirm('Duplicate this project?\n\nA new project will be created with Status = Active and today\'s date.\nYou can then edit the name and details.')) return;
+      try {
+        const res = await api('duplicateProject', { password: PW, projectId });
+        toast('Duplicated as ' + res.projectId + ' (' + res.jobCount + ' job roles)', true);
+        load(() => openEditProject(res.projectId));
+      } catch (e) { toast(errText(e)); }
+    }
+
+    async function signIn() {
+      const pw = $('#pw').value;
+      $('#signin').disabled = true;
+      try {
+        const ok = await api('verifyAdmin', { password: pw });
+        $('#signin').disabled = false;
+        if (!ok) return toast('Wrong password');
+        toast('');
+        PW = pw;
+        $('#pw').value = '';
+        $('#login').hidden = true;
+        $('#formWrap').hidden = false;
+        resetForm();
+        updateAdminUI();
+      } catch (e) {
+        $('#signin').disabled = false;
+        toast(errText(e));
+      }
+    }
+
+    function showAdmin(on) {
+      toast('');
+      $('#admin').hidden = !on;
+      $('#team').hidden = on;
+      $('#toggle').textContent = on ? '← Back to projects' : 'Admin';
+      if (on) {
+        $('#login').hidden = !!PW;
+        $('#formWrap').hidden = !PW;
+        if (PW && !EDIT_MODE) resetForm();
+        else if (!PW) $('#pw').focus();
+      } else {
+        EDIT_MODE = null;
+      }
+      updateAdminUI();
+    }
+
+    // Events
+    $('#q').addEventListener('input', render);
+    FILTERS.forEach(f => $('#' + f.id).addEventListener('change', render));
+    $('#clear').onclick = () => {
+      $('#q').value = '';
+      FILTERS.forEach(f => $('#' + f.id).value = '');
+      $('#f-status').value = 'active';
+      render();
+    };
+
+    const tap = (box, sel, fn) => {
+      box.addEventListener('click', e => {
+        const c = e.target.closest(sel);
+        if (c) fn(c, e);
+      });
+      box.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const c = e.target.closest(sel);
+          if (c) { e.preventDefault(); fn(c, e); }
+        }
+      });
+    };
+
+    tap($('#grid'), '.card', (c, e) => {
+      if (e.target.closest('[data-action]')) return;
+      openProject(+c.dataset.i);
+    });
+
+    tap($('#jgrid'), '.card', (c, e) => {
+      if (e.target.closest('[data-action]')) return;
+      openJob(+c.dataset.n);
+    });
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn || !PW) return;
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+      if (action === 'edit-job') openEditJob(id);
+      if (action === 'delete-job') deleteJob(id);
+      if (action === 'edit-project') openEditProject(id);
+      if (action === 'delete-project') deleteProject(id);
+      if (action === 'duplicate-project') duplicateProject(id);
+    });
+
+    $('#back2').onclick = () => screen(1);
+    $('#back3').onclick = () => screen(2);
+    $('#copyAll').onclick = () => P && copyText(P.jobs.map(shareText).join('\n\n'), $('#copyAll'));
+    $('#copyJob').onclick = () => J && copyText(shareText(J), $('#copyJob'));
+    $('#delProject').onclick = () => P && deleteProject(P.id);
+    $('#editJobBtn').onclick = () => J && openEditJob(J.jobid);
+    $('#delJobBtn').onclick = () => J && deleteJob(J.jobid);
+    $('#toggle').onclick = () => showAdmin($('#admin').hidden);
+    $('#signin').onclick = signIn;
+    $('#pw').addEventListener('keydown', e => { if (e.key === 'Enter') signIn(); });
+    $('#addPos').onclick = () => addPosition();
+    $('#save').onclick = save;
+    $('#cancelEdit').onclick = () => {
+      EDIT_MODE = null;
+      showAdmin(false);
+    };
+
+    load();
+  </script>
+</body>
+</html>
