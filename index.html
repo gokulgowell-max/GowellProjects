@@ -107,7 +107,7 @@
     <section id="team">
       <div id="s1">
         <div class="filters">
-          <input class="search" id="q" type="search" placeholder="Search client, job title, country, project ID..." aria-label="Search">
+          <input class="search" id="q" type="search" placeholder="Search client, job title, country, project ID..." aria-label="Search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
           <select id="f-status" aria-label="Project Status"></select>
           <select id="f-team" aria-label="Team"></select>
           <select id="f-country" aria-label="Country"></select>
@@ -234,7 +234,6 @@
 
     const NO_COPY = ['jobtitledesignation', 'numberofvacancies'];
 
-    // ========== API HELPER ==========
     async function api(action, payload = {}) {
       const body = { action, ...payload };
       const res = await fetch(API_URL, {
@@ -743,7 +742,6 @@
           return;
         }
 
-        // New project
         const shared = collect($('#shared'));
         const payload = { shared, jobs: Array.from(document.querySelectorAll('.pos')).map(collect) };
         if (!payload.shared.clientcompanyname || !payload.shared.country) return toast('Client name and country are required');
