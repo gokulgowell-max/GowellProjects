@@ -107,7 +107,6 @@
     <section id="team">
       <div id="s1">
         <div class="filters">
-          <!-- Strong anti-autofill version -->
           <input class="search" id="searchBox" type="text" name="gowell_search_2026" 
                  placeholder="Search client, job title, country, project ID..." 
                  aria-label="Search" 
@@ -194,8 +193,6 @@
     const pretty = s => (s.length > 3 && s === s.toUpperCase()) ? s.charAt(0) + s.slice(1).toLowerCase() : s;
     const HC = /nurs|caregiver|care giver|doctor|consultant|specialist|medical officer|physician|surgeon|therap|pharmac|midwi|home visit|health ?care|anm|gnm|lab tech/i;
 
-    const ADMIN_ONLY = ['agencyperson', 'emailphone', 'servicechargefees', 'candidatecosts'];
-
     let DATA = {labels: {}, rows: []}, VIEW = [], PW = '';
     let EDIT_MODE = null;
 
@@ -242,7 +239,9 @@
 
     const NO_COPY = ['jobtitledesignation', 'numberofvacancies'];
 
-    // Force clear search box repeatedly
+    // Hide these two columns (X and Y)
+    const HIDE_KEYS = ['additionalbenefits', 'agencyperson'];
+
     function forceClearSearch() {
       const box = document.getElementById('searchBox');
       if (box) {
@@ -304,7 +303,6 @@
 
     async function load(callback) {
       forceClearSearch();
-
       $('#meta').textContent = 'Loading projects...';
       try {
         const d = await api('getProjects');
@@ -489,11 +487,17 @@
         <p class="hint">${esc([P.clientcompanyname, pretty(P.country || ''), J.jobid, 'Status: ' + js].filter(Boolean).join(' · '))}</p>
         <dl>${DATA.order
           .filter(k => {
-            if (!J[k] || k === 'jobtitledesignation') return false;
-            if (ADMIN_ONLY.indexOf(k) > -1 && !PW) return false;
+            // Hide Column X and Y
+            if (HIDE_KEYS.indexOf(k) > -1) return false;
+            // Skip job title (already shown as heading)
+            if (k === 'jobtitledesignation') return false;
             return true;
           })
-          .map(k => `<dt>${esc(DATA.labels[k])}</dt><dd>${esc(J[k])}</dd>`)
+          .map(k => {
+            const label = DATA.labels[k] || k;
+            const value = J[k] || '—';
+            return `<dt>${esc(label)}</dt><dd>${esc(value)}</dd>`;
+          })
           .join('')}</dl>`;
       updateAdminUI();
       screen(3);
@@ -926,7 +930,6 @@
       setTimeout(forceClearSearch, 1000);
     });
 
-    // Keep clearing for a short time
     let clearCount = 0;
     const clearInterval = setInterval(() => {
       forceClearSearch();
