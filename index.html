@@ -107,7 +107,15 @@
     <section id="team">
       <div id="s1">
         <div class="filters">
-          <input class="search" id="q" type="search" placeholder="Search client, job title, country, project ID..." aria-label="Search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+          <!-- Strong anti-autofill version -->
+          <input class="search" id="searchBox" type="text" name="gowell_search_2026" 
+                 placeholder="Search client, job title, country, project ID..." 
+                 aria-label="Search" 
+                 autocomplete="off" 
+                 autocorrect="off" 
+                 autocapitalize="off" 
+                 spellcheck="false"
+                 value="">
           <select id="f-status" aria-label="Project Status"></select>
           <select id="f-team" aria-label="Team"></select>
           <select id="f-country" aria-label="Country"></select>
@@ -234,6 +242,15 @@
 
     const NO_COPY = ['jobtitledesignation', 'numberofvacancies'];
 
+    // Force clear search box repeatedly
+    function forceClearSearch() {
+      const box = document.getElementById('searchBox');
+      if (box) {
+        box.value = '';
+        box.setAttribute('value', '');
+      }
+    }
+
     async function api(action, payload = {}) {
       const body = { action, ...payload };
       const res = await fetch(API_URL, {
@@ -286,6 +303,8 @@
     }
 
     async function load(callback) {
+      forceClearSearch();
+
       $('#meta').textContent = 'Loading projects...';
       try {
         const d = await api('getProjects');
@@ -294,6 +313,7 @@
         DATA.projects = group(DATA.rows);
         fillFilters();
         $('#f-status').value = 'active';
+        forceClearSearch();
         render();
         screen(1);
         updateAdminUI();
@@ -323,7 +343,7 @@
     }
 
     function render() {
-      const toks = $('#q').value.toLowerCase().split(/\s+/).filter(Boolean);
+      const toks = $('#searchBox').value.toLowerCase().split(/\s+/).filter(Boolean);
       const hits = DATA.rows.filter(r => {
         for (const f of FILTERS) {
           const sel = $('#' + f.id).value;
@@ -836,10 +856,10 @@
     }
 
     // Events
-    $('#q').addEventListener('input', render);
+    $('#searchBox').addEventListener('input', render);
     FILTERS.forEach(f => $('#' + f.id).addEventListener('change', render));
     $('#clear').onclick = () => {
-      $('#q').value = '';
+      forceClearSearch();
       FILTERS.forEach(f => $('#' + f.id).value = '');
       $('#f-status').value = 'active';
       render();
@@ -896,6 +916,23 @@
       EDIT_MODE = null;
       showAdmin(false);
     };
+
+    // Strong anti-autofill
+    window.addEventListener('load', () => {
+      forceClearSearch();
+      setTimeout(forceClearSearch, 100);
+      setTimeout(forceClearSearch, 300);
+      setTimeout(forceClearSearch, 600);
+      setTimeout(forceClearSearch, 1000);
+    });
+
+    // Keep clearing for a short time
+    let clearCount = 0;
+    const clearInterval = setInterval(() => {
+      forceClearSearch();
+      clearCount++;
+      if (clearCount > 10) clearInterval(clearInterval);
+    }, 200);
 
     load();
   </script>
