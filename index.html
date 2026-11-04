@@ -238,8 +238,6 @@
     ];
 
     const NO_COPY = ['jobtitledesignation', 'numberofvacancies'];
-
-    // Hide these two columns (X and Y)
     const HIDE_KEYS = ['additionalbenefits', 'agencyperson'];
 
     function forceClearSearch() {
@@ -487,9 +485,7 @@
         <p class="hint">${esc([P.clientcompanyname, pretty(P.country || ''), J.jobid, 'Status: ' + js].filter(Boolean).join(' · '))}</p>
         <dl>${DATA.order
           .filter(k => {
-            // Hide Column X and Y
             if (HIDE_KEYS.indexOf(k) > -1) return false;
-            // Skip job title (already shown as heading)
             if (k === 'jobtitledesignation') return false;
             return true;
           })
@@ -503,24 +499,22 @@
       screen(3);
     }
 
+    // ========== UPDATED: Complete details copy ==========
     function shareText(r) {
-      const L = ['*' + pretty(r.jobtitledesignation) + '* · ' + pretty(r.country || '')];
-      const add = (l, v) => { if (v) L.push(l + ': ' + v); };
-      add('Client', r.clientcompanyname);
-      add('Vacancies', r.numberofvacancies);
-      add('Gender', r.genderpreference);
-      add('Age', r.agerange);
-      add('Qualification', r.educationalqualification);
-      add('Experience', r.minexperienceyears);
-      add('Licence/Exam', r.licensingexamrequirements);
-      add('Salary', salary(r));
-      add('Food', r.foodbenefit);
-      add('Accommodation', r.accommodationbenefit);
-      add('Transport', r.transportbenefit);
-      add('Benefits', r.additionalbenefits);
-      add('Interview', r.interviewmode);
-      add('Remarks', r.specialremarksnotes);
-      add('Ref', r.jobid);
+      const L = ['*' + pretty(r.jobtitledesignation || 'Job role') + '* · ' + pretty(r.country || '')];
+      
+      const HIDE_FROM_COPY = ['additionalbenefits', 'agencyperson', 'jobtitledesignation'];
+
+      DATA.order.forEach(k => {
+        if (HIDE_FROM_COPY.indexOf(k) > -1) return;
+        const value = r[k];
+        if (!value || String(value).trim() === '') return;
+
+        const label = DATA.labels[k] || k;
+        L.push(label + ': ' + value);
+      });
+
+      L.push('Ref: ' + (r.jobid || ''));
       return L.join('\n');
     }
 
@@ -921,7 +915,6 @@
       showAdmin(false);
     };
 
-    // Strong anti-autofill
     window.addEventListener('load', () => {
       forceClearSearch();
       setTimeout(forceClearSearch, 100);
